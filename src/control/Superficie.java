@@ -1,5 +1,12 @@
-package logica;
+package control;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
 import celulas.*;
+import excepciones.FormatoNumericoIncorrecto;
+import excepciones.IndicesFueraDeRango;
+import excepciones.PalabraIncorrecta;
 import utils.*;
 /**
  * @author J.Henry Yanchapanta Copara
@@ -10,7 +17,7 @@ public class Superficie {
 	private Celula[][] superficie;
 	private int filas;
 	private int columnas;
-	private Posicion[] libres;
+	//private Posicion[] libres;
 	
 	
 	final int MAX_CELULAS_S = 2;
@@ -41,27 +48,27 @@ public class Superficie {
 	/**Metodo que prepara la superficie instanciando  MAX_CELULAS celulas ,aleatoriamente, en la superficie.
 	 * 
 	 */
-	public void iniciar(){
-	
-		int i = 0;
-		while (i < MAX_CELULAS_S) {
-			int num1 = (int)( Math.random() * 10)% filas;
-			int num2 = (int) (Math.random() * 10) % columnas;
-			if (superficie[num1][num2] == null) {
-				superficie[num1][num2] = new CelulaSimple(MAX_PASOS_SIN_MOVER, PASOS_REPRODUCCION);
-				i++;
-			}
-		}
-		i=0;
-		while (i < MAX_CELULAS_C) {
-			int num1 = (int)( Math.random() * 10)% filas;
-			int num2 = (int) (Math.random() * 10) % columnas;
-			if (superficie[num1][num2] == null) {
-				superficie[num1][num2] = new CelulaSimple(MAX_PASOS_SIN_MOVER, PASOS_REPRODUCCION);
-				i++;
-			}
-		}
-	}
+//	public void iniciar(){
+//	
+//		int i = 0;
+//		while (i < MAX_CELULAS_S) {
+//			int num1 = (int)( Math.random() * 10)% filas;
+//			int num2 = (int) (Math.random() * 10) % columnas;
+//			if (superficie[num1][num2] == null) {
+//				superficie[num1][num2] = new CelulaSimple(MAX_PASOS_SIN_MOVER, PASOS_REPRODUCCION);
+//				i++;
+//			}
+//		}
+//		i=0;
+//		while (i < MAX_CELULAS_C) {
+//			int num1 = (int)( Math.random() * 10)% filas;
+//			int num2 = (int) (Math.random() * 10) % columnas;
+//			if (superficie[num1][num2] == null) {
+//				superficie[num1][num2] = new CelulaSimple(MAX_PASOS_SIN_MOVER, PASOS_REPRODUCCION);
+//				i++;
+//			}
+//		}
+//	}
 	
 	
 	/**Metodo que  verifica los espacios libres en las posiciones vecinas de una celula y las guarda en el atributo libres del objeto de tipo superficie
@@ -69,53 +76,7 @@ public class Superficie {
 	 * @param c int , numero de columna  en la que se encuentra la celula verificar
 	 *//*
 	public void huecos(int f, int c){//solo adyacentes
-		 libres = new Posicion[8];
-		
-		int i = 0;
-				if(f-1>=0 && c-1>=0 && superficie[f-1][c-1]==null){
-					libres[i]=new Posicion();				
-					libres[i].newPos(f-1, c-1);
-					i++;
-				}
-				if(f-1>=0 && c>=0 && superficie[f-1][c]==null){
-					libres[i]=new Posicion();
-					libres[i].newPos(f-1, c);
-					i++;	
-				}
-				if(f-1>=0 && c+1<columnas && superficie[f-1][c+1]==null){
-					libres[i]=new Posicion();
-					libres[i].newPos(f-1, c+1);
-					i++;
-
-				}
-				if(f>=0 && c-1>=0 && superficie[f][c-1]==null){
-					libres[i]=new Posicion();
-					libres[i].newPos(f, c-1);
-					i++;
-					
-				}
-				if(f>=0 && c+1<columnas&& superficie[f][c+1]==null){
-					libres[i]=new Posicion();
-					libres[i].newPos(f, c+1);
-					i++;
-
-				}
-				if(f+1<filas && c-1>=0 && superficie[f+1][c-1]==null){
-					libres[i]=new Posicion();
-					libres[i].newPos(f+1, c-1);
-					i++;
-				}
-				if(f+1<filas && c>=0 && superficie[f+1][c]==null){
-					libres[i]=new Posicion();
-					libres[i].newPos(f+1, c);
-					i++;
-				}
-				if(f+1<filas && c+1<columnas && superficie[f+1][c+1]==null){
-					libres[i]=new Posicion();
-					libres[i].newPos(f+1, c+1);
-					i++;
-					
-				}
+		 
 	}*/
 	
 	
@@ -129,7 +90,6 @@ public class Superficie {
 			
 		}
 	}
-	
 	//devuelve String
 	
 	/**Metodo que realiza los movimientos de las celulas cuando se realiza un paso ,intenta realizar el movimiento y actuar en consecuencia.
@@ -234,7 +194,7 @@ public class Superficie {
 	public boolean eliminaUnaCelula(int fila, int columna){
 		//si no es vacia, hay celula, la quito
 		if (!esVacio(fila, columna)){
-			superficie[fila][columna] = null;
+			this.superficie[fila][columna] = null;
 			return true;
 		}
 		//si no he podido, false
@@ -259,10 +219,10 @@ public class Superficie {
 	 * @param columna  numero de columna de la posicion en la que se instanciara la celula.
 	 * @return devuelve un boolean true si se instancia una celula , false en caso contrario.
 	 */
-	public boolean creaCelula(int fila, int columna){
+	public boolean creaCelula(int fila, int columna,Celula celula){
 		//si es igual a null, creo la celula
 		if (esVacio(fila, columna)){
-			superficie[fila][columna] = new CelulaSimple(PASOS_REPRODUCCION, PASOS_REPRODUCCION);
+			this.superficie[fila][columna] = celula;
 			return true;
 		}
 		//si no la creo, falso
@@ -301,6 +261,49 @@ public class Superficie {
 			}
 		}		
 		return vacia;
+	}
+	public void guardar(FileWriter fw)throws IOException,IndicesFueraDeRango{
+		boolean filaVacia=true;
+		for (int i = 0; i < this.filas; i++) {
+			for (int j = 0; j < this.columnas; j++) {
+				if(this.esVacio(i,j)){
+					fw.write(Integer.toString(i));
+					fw.write(" ");
+					fw.write(Integer.toString(j));
+					fw.write(" ");
+					this.superficie[i][j].guardar(fw);//llama a guardar celula y guardara celula dependiendo del tipo que sea
+					filaVacia=false;
+				}
+				if(!filaVacia){
+					fw.write(System.getProperty("line.separator"));
+					filaVacia=true;
+				}
+			}
+			
+		}
+	}
+	public void cargar(Scanner sc)throws PalabraIncorrecta,FormatoNumericoIncorrecto, IOException{
+		
+		while(sc.hasNextLine()){
+			int f=new Integer(sc.nextInt());
+			int c=new Integer(sc.nextInt());
+			String typeCell=sc.next();
+			
+			Celula celula=null;
+			if(typeCell.equalsIgnoreCase("SIMPLE")){
+				celula=new CelulaSimple(3,3);
+				
+			}
+			else if(typeCell.equalsIgnoreCase("COMPLEJA")){
+				celula=new CelulaCompleja(3);
+			}
+			else throw new PalabraIncorrecta("EXCEPTION: tipo de celula incorrecta en fichero.");
+			// y si ya se ha inicializado una celula en la misma pos
+			celula.cargar(sc);
+			this.superficie[f][c]=celula;
+			sc.nextLine();
+		}
+		
 	}
 	
 	

@@ -1,5 +1,9 @@
 package celulas;
-import logica.Superficie;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+import control.Superficie;
 import utils.*;
 
 
@@ -15,7 +19,7 @@ import utils.*;
 CelulaSimple. Esta clase contiene un atributo privado protected boolean esComestible.
 que indica si una celula es comestible o no. 
  */
-public abstract class Celula {
+public interface  Celula {
 	
 	//METODOS
 	/**Este m�todo realiza el movimiento de una c�lula colocada en la posici�n (f,c)
@@ -26,13 +30,15 @@ public abstract class Celula {
 	 * @param superficie
 	 * @return
 	 */
-	public abstract Casilla ejecutaMovimiento(int f, int c, Superficie superficie);
+	public  Casilla ejecutaMovimiento(int f, int c, Superficie superficie);
 	
 	
 	/** Este m�todo devuelve el valor del atributo esComestible. 
 	 * @return
 	 */
-	public abstract boolean esComenstible();
+	public  boolean esComenstible();
+	public void cargar(Scanner sc)throws IOException;
+	public void guardar(FileWriter fw) throws IOException;
 	
 	
 

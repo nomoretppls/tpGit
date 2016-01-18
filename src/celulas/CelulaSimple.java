@@ -1,16 +1,22 @@
 package celulas;
 
-import logica.Superficie;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+import control.Superficie;
 import utils.*;
 
-public class CelulaSimple extends Celula {
+public class CelulaSimple implements Celula {
 	private final int MAX_PASOS_REPRODUCCION;
 	private final int MAX_PASOS_SIN_MOVER;
+	private int pasReproduccion;
+	private int pasNoMov;
 
 	// CONSTRUCTOR
-	public CelulaSimple(int pasNoMov, int pasosReproduccion) {
+	public CelulaSimple(int pasosNoMov, int pasosReproduccion) {
 		this.MAX_PASOS_REPRODUCCION = pasosReproduccion;
-		this.MAX_PASOS_SIN_MOVER = pasNoMov;
+		this.MAX_PASOS_SIN_MOVER = pasosNoMov;
 	}
 
 	// METODOS
@@ -24,9 +30,10 @@ public class CelulaSimple extends Celula {
 	}
 
 	/**
-	 * Es el m�todo de superficie, busco en los adyacentes a mi posicion
+	 * Es el metodo de superficie, busco en los adyacentes a mi posicion
 	 * casillas libres, crea un array de libres adyacentes devuelve una pos
 	 * aleatoria del array de Casillas
+	 * @return me devuelve una casilla a la que se puede mover  la  celulasimple;
 	 */
 	@Override
 	public Casilla ejecutaMovimiento(int f, int c, Superficie superficie) {// solo
@@ -84,10 +91,44 @@ public class CelulaSimple extends Celula {
 		return libres[x];
 	}
 
+	public int getPasReproduccion() {
+		return pasReproduccion;
+	}
+
+	public void setPasReproduccion(int pasReproduccion) {
+		this.pasReproduccion = pasReproduccion;
+	}
+
+	public int getPasNoMov() {
+		return pasNoMov;
+	}
+
+	public void setPasNoMov(int pasNoMov) {
+		this.pasNoMov = pasNoMov;
+	}
+
 	@Override
 	public boolean esComenstible() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public void cargar(Scanner sc) throws IOException {
+		// TODO Auto-generated method stub
+		this.pasReproduccion=new Integer(sc.nextInt());
+		this.pasNoMov=new Integer(sc.nextInt());
+	}
+
+	@Override
+	public void guardar(FileWriter fw) throws IOException {
+		// TODO Auto-generated method stub
+		fw.write("simple");
+		fw.write(" ");
+		fw.write(Integer.toString(this.pasReproduccion));
+		fw.write(" ");
+		fw.write(Integer.toString(this.pasNoMov));
+	
 	}
 
 }
