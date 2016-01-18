@@ -7,20 +7,13 @@ public class Paso implements Comando{
 	@Override
 	public void ejecuta(Controlador control) {
 		// TODO Auto-generated method stub
-		
 		control.daUnPaso();
-		
-	}//fin IF PASO
-		
-	
-
+	}
 	@Override
 	public Comando parsea(String[] cadenaComando) {
 		// TODO Auto-generated method stub
 		if(cadenaComando[0]=="paso"){
-			
-			return ParserComandos.comando[0];//ayuda
-			
+			return ParserComandos.comando[0];
 		}
 		else{
 		return null;

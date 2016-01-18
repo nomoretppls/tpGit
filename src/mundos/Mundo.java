@@ -45,7 +45,7 @@ public abstract class Mundo {
 	public abstract void inicializaMundo()throws Exception;
 	public abstract void cargar();
 	public abstract void guardarMundo(FileWriter fw) throws IOException;
-	protected abstract void creaCelula(int f,int c);
+	protected abstract void creaCelula(int f,int c) throws IndicesFueraDeRango;
 	public void guardar(FileWriter fw)throws IOException, IndicesFueraDeRango{
 		
 		fw.write(Integer.toString(this.filas));
@@ -54,7 +54,7 @@ public abstract class Mundo {
 		fw.write(System.getProperty("line.separator"));
 		this.superficie.guardar(fw);
 	}
-	public void cargar(Scanner sc)throws PalabraIncorrecta, FormatoNumericoIncorrecto, IOException{
+	public void cargar(Scanner sc)throws PalabraIncorrecta, FormatoNumericoIncorrecto, IOException, IndicesFueraDeRango{
 		this.filas=sc.nextInt();
 		this.columnas=sc.nextInt();
 		this.superficie=new Superficie(this.filas,this.columnas);
@@ -146,8 +146,9 @@ public abstract class Mundo {
 	 *            celula.
 	 * @return devuelve un boolean true si elimina la celula , false en caso
 	 *         contrario.
+	 * @throws IndicesFueraDeRango 
 	 */
-	public boolean eliminar(int f, int c) {
+	public boolean eliminar(int f, int c) throws IndicesFueraDeRango {
 		return (superficie.eliminaUnaCelula(f, c));
 	}
 
@@ -155,7 +156,7 @@ public abstract class Mundo {
 
 		return pc.ayudaComandos();
 	}
-	public void crearCelula(int fila,int columna){
+	public void crearCelula(int fila,int columna) throws IndicesFueraDeRango{
 		this.creaCelula(fila, columna);
 	}
 

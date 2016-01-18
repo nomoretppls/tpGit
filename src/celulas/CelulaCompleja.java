@@ -2,6 +2,7 @@ package celulas;
 
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 import control.Superficie;
@@ -77,9 +78,11 @@ public class CelulaCompleja implements Celula {
 	}
 
 	@Override
-	public void guardar(FileWriter fw) {
+	public void guardar(FileWriter fw) throws IOException {
 		// TODO Auto-generated method stub
-		
+		fw.write("compleja");
+		fw.write(" ");
+		fw.write(Integer.toString(this.comidos));
 	}
 	
 	

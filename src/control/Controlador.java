@@ -24,7 +24,7 @@ public class Controlador {
 
 	private Mundo m = null;
 	private Scanner scan;
-	private boolean simulacionTerminada;
+	private boolean simulacionTerminada = false;
 
 	/**
 	 * Metodo que interactua con el ususario mostrandole las acciones que puede
@@ -36,13 +36,12 @@ public class Controlador {
 		ParserComandos pc = new ParserComandos();
 		menuOpciones();
 
-		scan = new Scanner(System.in);
-		String cin = scan.nextLine().toString();
-		
-		String[] entrada = cin.split(" ");
-
-		while (!entrada[0].equals("salir")) {
+		while (!simulacionTerminada) {
 			try {
+				scan = new Scanner(System.in);
+				String cin = scan.nextLine().toString();
+				String[] entrada = cin.split(" ");
+
 				Comando comando = ParserComandos.parseaComando(entrada);
 				if (comando != null) {
 					comando.ejecuta(this);// me devuelve el comando
@@ -64,19 +63,19 @@ public class Controlador {
 			} finally {
 				scan.close();
 			}
-			scan = new Scanner(System.in);
-			cin = scan.nextLine().toString();
-			
-			entrada = cin.split(" ");
+			// scan = new Scanner(System.in);
+			// cin = scan.nextLine().toString();
+			//
+			// entrada = cin.split(" ");
 		}
 	}
 
-	public void cargar(String nomFich) throws FileNotFoundException, FormatoNumericoIncorrecto {
+	public void cargar(String nomFich) throws FormatoNumericoIncorrecto, IOException {
 		Mundo game = this.m;
 		Scanner sc = new Scanner(new File(nomFich));
 		try {
 			String typeGame = sc.nextLine();
-			if(typeGame.equalsIgnoreCase("SIMPLE")) {
+			if (typeGame.equalsIgnoreCase("SIMPLE")) {
 				this.m = new MundoSimple();
 				this.m.cargar(sc);
 			} else {
@@ -89,25 +88,29 @@ public class Controlador {
 			}
 		} catch (PalabraIncorrecta e) {
 			this.m = game;
-		}
-//		catch (FormatoNumericoIncorrecto e) {
-//			this.m = game;
-//
-//		}
-		finally{
+		} catch (FormatoNumericoIncorrecto e) {
+			this.m = game;
+
+		} catch (IndicesFueraDeRango e) {
+			System.out.println("EXCEPTION: El fichero tiene celulas fuera de rango." + e.toString());
+		} finally {
 			sc.close();
 		}
 	}
 
-	public void guardar(String nomFich) throws Exception {
-		try{
-			FileWriter fw=new FileWriter(nomFich);//sobreescribimos el fichero
+	public void guardar(String nomFich) {
+		try {
+			FileWriter fw = new FileWriter(nomFich);// sobreescribimos el
+													// fichero
 			this.m.guardarMundo(fw);
 			this.m.guardar(fw);
 			fw.flush();
 			fw.close();
-		}catch(IOException e){
-			
+		} catch (IOException e) {
+
+		} catch (IndicesFueraDeRango e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -135,10 +138,9 @@ public class Controlador {
 	// mientras lo que se escribe no sea igual a salir o es vacia
 	/*
 	 * while (!cadena.equals("salir")) {
-	 
-
-	/**
-	 * Metodo que muestra las opciones que puede elegir el usuario para el
+	 * 
+	 * 
+	 * /** Metodo que muestra las opciones que puede elegir el usuario para el
 	 * desarrollo del mundo celular.
 	 * 
 	 * 
@@ -156,23 +158,33 @@ public class Controlador {
 		System.out.print("COMANDO > ");
 
 	}
+
 	/**
 	 * Mensaje de despedida, que se envia cuando se termina el programa.
 	 * 
 	 */
 	public void salir() {
+		this.simulacionTerminada = true;
 		System.out.println("HASTA PRONTO");
 	}
 
 	public void eliminar(int fila, int columna) {
 		// TODO Auto-generated method stub
-		boolean ok=this.m.eliminar(fila, columna);
-		if(ok){
-			System.out.println("Se ha eliminado un celula fila columna");
+		boolean ok;
+		try {
+			ok = this.m.eliminar(fila, columna);
+			if (ok) {
+				System.out.println("Se ha eliminado un celula fila columna");
+			} else {
+				System.out.println("No se ha eliminado la celula");
+			}
+		} catch (IndicesFueraDeRango e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.toString());
+
+			// e.printStackTrace();
 		}
-		else{
-			System.out.println("No se ha eliminado la celula");
-		}
+
 	}
 
 	public void ayuda() {
@@ -180,12 +192,26 @@ public class Controlador {
 		System.out.println(this.m.mostrarAyuda());
 	}
 
-	public void crearCelula(int fila, int columna) {
+	public void crearCelula(int fila, int columna) throws IndicesFueraDeRango {
 		// TODO Auto-generated method stub
-		this.m.crearCelula(fila,columna);
-		
+		this.m.crearCelula(fila, columna);
+
+	}
+
+	public void iniciar() {
+		// TODO Auto-generated method stub
+		try {
+			this.m.inicializaMundo();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	}
+
+	public void vaciar() {
+		// TODO Auto-generated method stub
+		this.m.limpiar();
 		
 	}
 
-
+}

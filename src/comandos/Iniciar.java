@@ -9,16 +9,7 @@ public class Iniciar implements Comando{
 	@Override
 	public void ejecuta(Controlador control)throws ErrorDeInicializacion{
 		// TODO Auto-generated method stub
-		Mundo mundo;
-		String cin =scan;
-		String cadena =.toLowerCase().trim();
-		String[] entrada = cadena.split(" ");
-		if(entrada[1].equals("simple")){
-			//hacer cast a int de entrada[2] etc..
-			mundo= new MundoSimple((int)entrada[2],(int)entrada[3],(int) entrada[4]);
-		}
-		
-		mundo.iniciar();
+		control.iniciar();
 	}
 
 	@Override

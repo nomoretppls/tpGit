@@ -30,7 +30,7 @@ public class MundoSimple extends Mundo {
 				int f=(int)( Math.random() * 10)%filas;
 				int c=(int)( Math.random() * 10)%columnas;
 				if(this.superficie.esVacio(f,c)){
-					this.superficie.creaCelula(f,c,new CelulaSimple());
+					this.superficie.creaCelula(f,c,new CelulaSimple(3,3));
 					i++;
 				}
 			}
@@ -53,7 +53,7 @@ public class MundoSimple extends Mundo {
 		fw.write("simple");fw.write(System.getProperty("line.separator"));
 	}
 	
-	protected void creaCelula(int f,int c){
+	protected void creaCelula(int f,int c) throws IndicesFueraDeRango{
 		System.out.println("estas en un mundo simple");
 		this.superficie.creaCelula(f,c,new CelulaSimple(3,3));
 	}

@@ -1,17 +1,19 @@
 package comandos;
 
 import control.*;
+import excepciones.IndicesFueraDeRango;
 
 
 public class CrearCelulaFC implements Comando{
 	private int fila;
 	private int columna;
+	public CrearCelulaFC(){};
 	public CrearCelulaFC(int fila,int columna){
 		this.fila=fila;
 		this.columna=columna;
 	}
 	@Override
-	public void ejecuta(Controlador control) {
+	public void ejecuta(Controlador control) throws IndicesFueraDeRango {
 		// TODO Auto-generated method stub
 		control.crearCelula(this.fila,this.columna);
 	}

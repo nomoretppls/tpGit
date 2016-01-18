@@ -1,6 +1,7 @@
 package comandos;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import control.Controlador;
 import excepciones.FormatoNumericoIncorrecto;
@@ -15,7 +16,7 @@ public class Cargar implements Comando {
 	public Cargar(){}
 
 	@Override
-	public void ejecuta(Controlador control) throws FileNotFoundException, FormatoNumericoIncorrecto {
+	public void ejecuta(Controlador control) throws FormatoNumericoIncorrecto, IOException {
 		// TODO Auto-generated method stub
 		control.cargar(this.nomFich);
 		

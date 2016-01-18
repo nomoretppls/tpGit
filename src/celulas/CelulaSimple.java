@@ -88,7 +88,7 @@ public class CelulaSimple implements Celula {
 
 		int x = (int) (Math.random() * 10) % size(libres);
 
-		return libres[x];
+		return libres[x];//se va a mover a esta posicion
 	}
 
 	public int getPasReproduccion() {

@@ -1,13 +1,14 @@
 package comandos;
 
-import mundos.*;
+import control.Controlador;
+
 
 public class Vaciar implements Comando {
 
 	@Override
-	public void ejecuta(Mundo mundo) {
+	public void ejecuta(Controlador control) {
 		// TODO Auto-generated method stub
-		mundo.limpiar();
+		control.vaciar();
 	}
 
 	@Override

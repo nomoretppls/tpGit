@@ -1,13 +1,14 @@
 package comandos;
 
-import mundos.*;
+import control.Controlador;
+
 
 public class Salir implements Comando {
 
 	@Override
-	public void ejecuta(Mundo mundo) {
+	public void ejecuta(Controlador control) {
 		// TODO Auto-generated method stub
-
+		control.salir();
 	}
 
 	@Override
