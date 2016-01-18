@@ -36,8 +36,9 @@ public class CelulaSimple implements Celula {
 	 * @return me devuelve una casilla a la que se puede mover  la  celulasimple;
 	 */
 	@Override
-	public Casilla ejecutaMovimiento(int f, int c, Superficie superficie) {// solo
+	public Casilla ejecutaMovimiento(int f, int c, Superficie superficie,String avance) {// solo
 		int tamañoArray = 8; 
+		Casilla newPos=null;
 		Casilla libres[] = new Casilla[tamañoArray];
 
 		int i = 0;
@@ -46,50 +47,58 @@ public class CelulaSimple implements Celula {
 			libres[i] = new Casilla(f - 1, c - 1);
 			i++;
 		}
-		if (f - 1 >= 0 && c >= 0
+		else if (f - 1 >= 0 && c >= 0
 				&& superficie.getSuperficie()[f - 1][c] == null) {
 			libres[i] = new Casilla(f - 1, c);
 			i++;
 		}
-		if (f - 1 >= 0 && c + 1 < superficie.getColumnas()
+		else if (f - 1 >= 0 && c + 1 < superficie.getColumnas()
 				&& superficie.getSuperficie()[f - 1][c + 1] == null) {
 			libres[i] = new Casilla(f - 1, c + 1);
 			i++;
 
 		}
-		if (f >= 0 && c - 1 >= 0
+		else if (f >= 0 && c - 1 >= 0
 				&& superficie.getSuperficie()[f][c - 1] == null) {
 			libres[i] = new Casilla(f, c - 1);
 			i++;
 
 		}
-		if (f >= 0 && c + 1 < superficie.getColumnas()
+		else if (f >= 0 && c + 1 < superficie.getColumnas()
 				&& superficie.getSuperficie()[f][c + 1] == null) {
 			libres[i] = new Casilla(f, c + 1);
 			i++;
 
 		}
-		if (f + 1 < superficie.getFilas() && c - 1 >= 0
+		else if (f + 1 < superficie.getFilas() && c - 1 >= 0
 				&& superficie.getSuperficie()[f + 1][c - 1] == null) {
 			libres[i] = new Casilla(f + 1, c - 1);
 			i++;
 		}
-		if (f + 1 < superficie.getFilas() && c >= 0
+		else if (f + 1 < superficie.getFilas() && c >= 0
 				&& superficie.getSuperficie()[f + 1][c] == null) {
 			libres[i] = new Casilla(f + 1, c);
 			i++;
 		}
-		if (f + 1 < superficie.getFilas() && c + 1 < superficie.getColumnas()
+		else if (f + 1 < superficie.getFilas() && c + 1 < superficie.getColumnas()
 				&& superficie.getSuperficie()[f + 1][c + 1] == null) {
 			libres[i] = new Casilla(f + 1, c + 1);
 			i++;
-
+		
 		}
-
+		else return null;
+		
 		int x = (int) (Math.random() * 10) % size(libres);
-
-		return libres[x];//se va a mover a esta posicion
+		
+		newPos=libres[x];
+		//muevo la celula a la nueva posicion
+		superficie.moverCelula(f,c,newPos.getX(),newPos.getY());
+		
+		
+		return newPos;//ahora esta en esta posicion
 	}
+	
+	
 
 	public int getPasReproduccion() {
 		return pasReproduccion;

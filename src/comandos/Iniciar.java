@@ -2,7 +2,7 @@ package comandos;
 
 import control.Controlador;
 import excepciones.ErrorDeInicializacion;
-import mundos.*;
+
 
 public class Iniciar implements Comando{
 
@@ -14,9 +14,9 @@ public class Iniciar implements Comando{
 
 	@Override
 	public Comando parsea(String[] cadenaComando) {
-		if(cadenaComando[0]=="iniciar"){
+		if(cadenaComando[0].equalsIgnoreCase("iniciar")){
 			
-			return ParserComandos.comando[1];//ayuda
+			return ParserComandos.comando[1];
 			
 		}
 		else{
@@ -27,7 +27,7 @@ public class Iniciar implements Comando{
 	@Override
 	public String textoAyuda() {
 		// TODO Auto-generated method stub
-		return "Inicia el mundo colocando las celulas en la superficie aleatoriamente.";
+		return "Iniciar: Inicia el mundo colocando las celulas en la superficie aleatoriamente.";
 	}
 
 	

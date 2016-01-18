@@ -14,10 +14,10 @@ public class EliminarCelula implements Comando{
 
 	@Override
 	public Comando parsea(String[] cadenaComando) {
-		if(cadenaComando[0]=="eliminarCelula"){
+		if(cadenaComando[0].equalsIgnoreCase("ELIMINARCELULA")){
 			fila=Integer.parseInt(cadenaComando[1]);
 			columna=Integer.parseInt(cadenaComando[2]);
-			return ParserComandos.comando[4];//ayuda
+			return ParserComandos.comando[3];//ayuda
 			
 		}
 		else{
@@ -28,7 +28,7 @@ public class EliminarCelula implements Comando{
 	@Override
 	public String textoAyuda() {
 		// TODO Auto-generated method stub
-		return "eliminarCelula: Elimina la celula  de la fila f y columna c.\n";
+		return "EliminarCelula: Elimina la celula  de la fila f y columna c.\n";
 	}
 
 	

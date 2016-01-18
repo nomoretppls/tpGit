@@ -21,11 +21,12 @@ public class Superficie {
 	private int columnas;
 	private Casilla[] libres;
 
-	final int MAX_CELULAS_S = 2;
-	final int MAX_CELULAS_C = 2;
+//	final int MAX_CELULAS_S = 2;
+//	final int MAX_CELULAS_C = 2;
 	final int PASOS_REPRODUCCION = 3;
 	final int MAX_PASOS_SIN_MOVER = 3;
 
+	public Superficie(){}
 	/**
 	 * Constructor de la clase que inicia todas las posiciones de la superfice
 	 * con un puntero a null.
@@ -38,7 +39,7 @@ public class Superficie {
 	public Superficie(int nf, int nc) {
 		this.filas = nf;
 		this.columnas = nc;
-		superficie = new CelulaSimple[this.filas][this.columnas];
+		this.superficie=new Celula[filas][columnas];
 
 		for (int i = 0; i < this.filas; i++) {
 			for (int j = 0; j < this.columnas; j++) {
@@ -46,52 +47,7 @@ public class Superficie {
 			}
 		}
 	}
-
-	/**
-	 * Metodo que prepara la superficie instanciando MAX_CELULAS celulas
-	 * ,aleatoriamente, en la superficie.
-	 * 
-	 */
-	// public void iniciar(){
-	//
-	// int i = 0;
-	// while (i < MAX_CELULAS_S) {
-	// int num1 = (int)( Math.random() * 10)% filas;
-	// int num2 = (int) (Math.random() * 10) % columnas;
-	// if (superficie[num1][num2] == null) {
-	// superficie[num1][num2] = new CelulaSimple(MAX_PASOS_SIN_MOVER,
-	// PASOS_REPRODUCCION);
-	// i++;
-	// }
-	// }
-	// i=0;
-	// while (i < MAX_CELULAS_C) {
-	// int num1 = (int)( Math.random() * 10)% filas;
-	// int num2 = (int) (Math.random() * 10) % columnas;
-	// if (superficie[num1][num2] == null) {
-	// superficie[num1][num2] = new CelulaSimple(MAX_PASOS_SIN_MOVER,
-	// PASOS_REPRODUCCION);
-	// i++;
-	// }
-	// }
-	// }
-
-	/**
-	 * Metodo que verifica los espacios libres en las posiciones vecinas de una
-	 * celula y las guarda en el atributo libres del objeto de tipo superficie
-	 * 
-	 * @param f
-	 *            int , numero de fila en la que se encuentra la celula a
-	 *            verificar
-	 * @param c
-	 *            int , numero de columna en la que se encuentra la celula
-	 *            verificar
-	 *//*
-		 * public void huecos(int f, int c){//solo adyacentes
-		 * 
-		 * }
-		 */
-
+	
 	public void inicializaArrayMovidos(boolean[][] movido) {
 		for (int i = 0; i < filas; i++) {
 			for (int j = 0; j < columnas; j++) {
@@ -111,6 +67,18 @@ public class Superficie {
 	 * @return string mensaje, que devuelve los pasos que ha realizado la
 	 *         evolucion.
 	 */
+	public void moverCelula(int f, int c, int nuevafila, int nuevaColumna){
+		this.superficie[nuevafila][nuevaColumna] = this.superficie[f][c];
+		this.superficie[f][c] = null;
+	}
+	public void aumentoComidos(int f,int c){
+		if(superficie[f][c].esComenstible()){
+			
+		}
+	}
+	
+	
+
 	public String movimiento() {
 		String mensaje = "";
 		boolean acciones = false;
@@ -139,8 +107,9 @@ public class Superficie {
 						//
 						if (superficie[libres[randNum].getX()][libres[randNum].getY()].getPasosReproduccion() == -1
 								&& huecosLibres > 0) {
-							 creaCelula(i, j,new CelulaSimple(3,3));// mensaje de
-														// rerpoduccion
+							creaCelula(i, j, new CelulaSimple(3, 3));// mensaje
+																		// de
+							// rerpoduccion
 							mensaje = mensaje + "Nace una celula en (" + i + "," + j + ")" + "cuyo padre es ("
 									+ libres[randNum].getX() + "," + libres[randNum].getY() + ").\n";
 							superficie[libres[randNum].getX()][libres[randNum].getY()].setPasosReproduccion(3);
@@ -224,18 +193,17 @@ public class Superficie {
 	 *            numero de columna que ocupa la celula.
 	 * @return devuelve un boolean true si se elimina la celula , false en caso
 	 *         contrario.
-	 * @throws IndicesFueraDeRango 
+	 * @throws IndicesFueraDeRango
 	 */
 	public boolean eliminaUnaCelula(int fila, int columna) throws IndicesFueraDeRango {
 		// si no es vacia, hay celula, la quito
-		if (fila>=this.filas ||columna>=this.columnas){
+		if (fila >= this.filas || columna >= this.columnas) {
 			throw new IndicesFueraDeRango("EXCEPTION:indices fuera de rango.");
-		}
-		else if (!esVacio(fila, columna)) {
+		} else if (!esVacio(fila, columna)) {
 			this.superficie[fila][columna] = null;
 			return true;
-		}
-		else System.out.println("NADA que eliminar.Posicion vacia.");
+		} else
+			System.out.println("NADA que eliminar.Posicion vacia.");
 		// si no he podido, false
 		return false;
 	}
@@ -266,42 +234,41 @@ public class Superficie {
 	 *            celula.
 	 * @return devuelve un boolean true si se instancia una celula , false en
 	 *         caso contrario.
-	 * @throws IndicesFueraDeRango 
+	 * @throws IndicesFueraDeRango
 	 */
 	public void creaCelula(int fila, int columna, Celula celula) throws IndicesFueraDeRango {
 		// si es igual a null, creo la celula
-		//aqui lanzo la excepcion de fueraderango 
-			if (fila>=this.filas ||columna>=this.columnas){
-				throw new IndicesFueraDeRango("EXCEPTION:indices fuera de rango.");
-			}
-			else if (this.esVacio(fila, columna)) {
-				this.superficie[fila][columna] = celula;
-			}
-			else {
-				System.out.println("Posicion ocupada.");
-			}
-			
+		// aqui lanzo la excepcion de fueraderango
+		if (fila >= this.filas || columna >= this.columnas) {
+			throw new IndicesFueraDeRango("EXCEPTION:indices fuera de rango.");
+		} else if (this.esVacio(fila, columna)) {
+			this.superficie[fila][columna] = celula;
+		} else {
+			System.out.println("Posicion ocupada.");
+		}
+
 		// si no la creo, falso
 
 	}
 
 	/**
-	 * Metodo que recorre la superficie y devuelve un string con las posiciones
-	 * de la superficie.
+	 * Metodo que recorre la superficie y devuelve un string con el avance del
+	 * juego para mostrarlo por consola.
 	 * 
 	 * @return string , devuelve un string con todas las posiciones de la
 	 *         superficie
 	 */
 	public String mostrar() {
 		String mensaje = "";
-		for (int i = 0; i < filas; i++) {
-			for (int k = 0; k < columnas; k++) {
+		for (int i = 0; i < this.filas; i++) {
+			for (int k = 0; k < this.columnas; k++) {
 				if (superficie[i][k] == null) {
-					mensaje = mensaje + "  " + "\t--";
-				} else {
-					mensaje = mensaje + "\t" + "(" + superficie[i][k].getPasNoMov() + "-"
-							+ superficie[i][k].getPasosReproduccion() + ")";
-				}
+					mensaje = mensaje + "\t-";
+				} else if (superficie[i][k] instanceof CelulaSimple) {
+					mensaje = mensaje + "\tX";
+
+				} else
+					mensaje = mensaje + "\t*";
 			}
 			mensaje = mensaje + "\n";
 		}
@@ -349,7 +316,8 @@ public class Superficie {
 		}
 	}
 
-	public void cargar(Scanner sc) throws IndicesFueraDeRango,PalabraIncorrecta, FormatoNumericoIncorrecto, IOException {
+	public void cargar(Scanner sc)
+			throws IndicesFueraDeRango, PalabraIncorrecta, FormatoNumericoIncorrecto, IOException {
 
 		while (sc.hasNextLine()) {
 			int f = new Integer(sc.nextInt());
@@ -372,9 +340,18 @@ public class Superficie {
 
 	}
 
-	public Casilla ejecutaMovimiento(int f, int c) {
+	public Casilla ejecutaMovimiento(int f, int c,String avance) {
 		// celula.ejecutaMovimiento(...)
-		return (superficie[f][c].ejecutaMovimiento(f, c, this));
+		Casilla newPos;
+		for (int i = 0; i < filas; i++) {
+			for (int j = 0; j <columnas; j++) {
+				if(superficie[i][j]!=null){
+					newPos=superficie[i][j].ejecutaMovimiento(i, j,this, avance);
+					
+				}
+			}
+		}
+		return null;
 
 	}
 

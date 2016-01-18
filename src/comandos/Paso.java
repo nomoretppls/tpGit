@@ -12,7 +12,7 @@ public class Paso implements Comando{
 	@Override
 	public Comando parsea(String[] cadenaComando) {
 		// TODO Auto-generated method stub
-		if(cadenaComando[0]=="paso"){
+		if(cadenaComando[0].equalsIgnoreCase("PASO")){
 			return ParserComandos.comando[0];
 		}
 		else{
@@ -23,7 +23,7 @@ public class Paso implements Comando{
 	@Override
 	public String textoAyuda() {
 		// TODO Auto-generated method stub
-		String ayuda=" paso: Este comando realiza un paso en la evolucion moviendo las celulas.\n";
+		String ayuda=" Paso: Este comando realiza un paso en la evolucion moviendo las celulas.\n";
 		return ayuda;
 	}
 

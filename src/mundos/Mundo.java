@@ -21,45 +21,59 @@ public abstract class Mundo {
 	protected Superficie superficie;
 	protected int filas;
 	protected int columnas;
-	private ParserComandos pc=new ParserComandos();
+	// private ParserComandos pc=new ParserComandos();
 
 	// CONSTRUCTOR
 	/**
 	 * 
 	 */
-	public Mundo(){
-		superficie=null;
-		filas=0;
-		columnas=0;
+	public Mundo() {
+		superficie = null;
+		filas = 0;
+		columnas = 0;
 	}
-//	public Mundo() {
-//
-//		superficie = new Superficie(filas, columnas);
-//		pc = new ParserComandos();
-//		superficie.iniciar();
-//	}
-	public Mundo(int filas, int columnas){
-		this.filas=filas;
-		this.columnas=columnas;
+
+	// public Mundo() {
+	//
+	// superficie = new Superficie(filas, columnas);
+	// pc = new ParserComandos();
+	// superficie.iniciar();
+	// }
+	public Mundo(int filas, int columnas) {
+		this.filas = filas;
+		this.columnas = columnas;
+		this.superficie = new Superficie(filas, columnas);
 	}
-	public abstract void inicializaMundo()throws Exception;
+
+	public abstract void inicializaMundo() throws Exception;
+
 	public abstract void cargar();
+
 	public abstract void guardarMundo(FileWriter fw) throws IOException;
-	protected abstract void creaCelula(int f,int c) throws IndicesFueraDeRango;
-	public void guardar(FileWriter fw)throws IOException, IndicesFueraDeRango{
-		
+
+	protected abstract void creaCelula(int f, int c) throws IndicesFueraDeRango;
+
+	/**
+	 * @param fw
+	 * @throws IOException
+	 * @throws IndicesFueraDeRango
+	 */
+	public void guardar(FileWriter fw) throws IOException, IndicesFueraDeRango {
+
 		fw.write(Integer.toString(this.filas));
 		fw.write(System.getProperty("line.separator"));
 		fw.write(Integer.toString(this.columnas));
 		fw.write(System.getProperty("line.separator"));
 		this.superficie.guardar(fw);
 	}
-	public void cargar(Scanner sc)throws PalabraIncorrecta, FormatoNumericoIncorrecto, IOException, IndicesFueraDeRango{
-		this.filas=sc.nextInt();
-		this.columnas=sc.nextInt();
-		this.superficie=new Superficie(this.filas,this.columnas);
+
+	public void cargar(Scanner sc)
+			throws PalabraIncorrecta, FormatoNumericoIncorrecto, IOException, IndicesFueraDeRango {
+		this.filas = sc.nextInt();
+		this.columnas = sc.nextInt();
+		this.superficie = new Superficie(this.filas, this.columnas);
 		this.superficie.cargar(sc);
-		
+
 	}
 
 	// para vaciar la superficie
@@ -71,7 +85,7 @@ public abstract class Mundo {
 		superficie.vaciarSuperficie();
 	}
 
-	//__________________________________________________
+	// __________________________________________________
 	/**
 	 * Metodo que muestra al usuario el progreso de las celulas.
 	 * 
@@ -93,9 +107,9 @@ public abstract class Mundo {
 	 * Metodo que inicia el mundo.
 	 * 
 	 */
-//	public void iniciar() {
-//		superficie.iniciar();
-//	}
+	// public void iniciar() {
+	// superficie.iniciar();
+	// }
 
 	/**
 	 * Metodo que da un paso en la evolucion del mundo celular.
@@ -130,10 +144,10 @@ public abstract class Mundo {
 	 * @return devuelve un boolean si crea la celula, en caso contrario devuelve
 	 *         false.
 	 */
-	
-//	public boolean crear(int f, int c) {
-//		return (superficie.creaCelula(f, c));
-//	}
+
+	// public boolean crear(int f, int c) {
+	// return (superficie.creaCelula(f, c));
+	// }
 
 	/**
 	 * Metodo que elimina una celula de una posicion de la superficie.
@@ -146,7 +160,7 @@ public abstract class Mundo {
 	 *            celula.
 	 * @return devuelve un boolean true si elimina la celula , false en caso
 	 *         contrario.
-	 * @throws IndicesFueraDeRango 
+	 * @throws IndicesFueraDeRango
 	 */
 	public boolean eliminar(int f, int c) throws IndicesFueraDeRango {
 		return (superficie.eliminaUnaCelula(f, c));
@@ -154,10 +168,16 @@ public abstract class Mundo {
 
 	public String mostrarAyuda() {
 
-		return pc.ayudaComandos();
+		return ParserComandos.ayudaComandos();
 	}
-	public void crearCelula(int fila,int columna) throws IndicesFueraDeRango{
-		this.creaCelula(fila, columna);
+
+	public void crearCelula(int fila, int columna) throws IndicesFueraDeRango {
+		if (superficie.esVacio(fila, columna)) {
+			this.creaCelula(fila, columna);
+		}
+		else {
+			System.out.println("Posicion ocupada.");
+		}
 	}
 
 }

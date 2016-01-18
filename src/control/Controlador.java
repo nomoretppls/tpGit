@@ -46,27 +46,35 @@ public class Controlador {
 				if (comando != null) {
 					comando.ejecuta(this);// me devuelve el comando
 											// correspondiente
+
 				}
 
 			} catch (PalabraIncorrecta e) {
-				System.out.println(e);
+				e.getStackTrace();
+				System.out.println("pi" + e.toString());
 			} catch (IndicesFueraDeRango e) {
-				System.out.println(e);
+				e.getStackTrace();
+				System.out.println("ifr" + e);
 			} catch (ErrorDeInicializacion e) {
-				System.out.println(e);
+				e.getStackTrace();
+				System.out.println("edi" + e);
 			} catch (FileNotFoundException e) {
-				System.out.println(e);
+				e.getStackTrace();
+				System.out.println("fnfe" + e);
 			} catch (FormatoNumericoIncorrecto e) {
+				e.getStackTrace();
 				System.out.println(e);
 			} catch (Exception e) {
-				System.out.println(e);
+				e.getStackTrace();
+				System.out.println(e + "e");
 			} finally {
-				scan.close();
+				if (!m.superficieVacia()&& !simulacionTerminada) {
+					System.out.println(m.mostrarAvance());
+				}
+				if(!simulacionTerminada) menuOpciones();
+				
 			}
-			// scan = new Scanner(System.in);
-			// cin = scan.nextLine().toString();
-			//
-			// entrada = cin.split(" ");
+			
 		}
 	}
 
@@ -94,7 +102,7 @@ public class Controlador {
 		} catch (IndicesFueraDeRango e) {
 			System.out.println("EXCEPTION: El fichero tiene celulas fuera de rango." + e.toString());
 		} finally {
-			sc.close();
+			// sc.close();
 		}
 	}
 
@@ -122,6 +130,7 @@ public class Controlador {
 		} else {
 			System.out.println("No se ha podido dar un paso en la evolucion, la superficie esta vacia.\n");
 		}
+
 	}
 
 	public void juega(Mundo mundo) throws Exception {// este mundo se inicia en
@@ -130,6 +139,7 @@ public class Controlador {
 		this.m = mundo;
 		mundo.inicializaMundo();
 		// completar
+
 	}
 
 	// fin del while
@@ -150,8 +160,8 @@ public class Controlador {
 		System.out.println("ESCRIBE UNA DE LAS SIGUIENTES OPCIONES, COMO APARECEN");
 		System.out.println("INICIAR");
 		System.out.println("PASO");
-		System.out.println("CREARCELULA");
-		System.out.println("ELIMINARCELULA");
+		System.out.println("CREARCELULA F C");
+		System.out.println("ELIMINARCELULA F C");
 		System.out.println("VACIAR");
 		System.out.println("AYUDA");
 		System.out.println("SALIR");
@@ -174,13 +184,13 @@ public class Controlador {
 		try {
 			ok = this.m.eliminar(fila, columna);
 			if (ok) {
-				System.out.println("Se ha eliminado un celula fila columna");
+				System.out.println("Eliminamos la celula de la posicion: ("+fila+","+columna+").\n");
 			} else {
 				System.out.println("No se ha eliminado la celula");
 			}
 		} catch (IndicesFueraDeRango e) {
 			// TODO Auto-generated catch block
-			System.out.println(e.toString());
+			System.out.println(e.toString()+"----");
 
 			// e.printStackTrace();
 		}
@@ -192,9 +202,17 @@ public class Controlador {
 		System.out.println(this.m.mostrarAyuda());
 	}
 
-	public void crearCelula(int fila, int columna) throws IndicesFueraDeRango {
+	public void crearCelula(int fila, int columna)  {
 		// TODO Auto-generated method stub
-		this.m.crearCelula(fila, columna);
+		try {
+			
+			this.m.crearCelula(fila, columna);
+			System.out.println("Creamos nueva celula en la posicion:("+fila+","+columna+").\n");
+		} catch (IndicesFueraDeRango e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.toString());
+			e.printStackTrace();
+		}
 
 	}
 
@@ -211,7 +229,7 @@ public class Controlador {
 	public void vaciar() {
 		// TODO Auto-generated method stub
 		this.m.limpiar();
-		
+
 	}
 
 }

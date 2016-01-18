@@ -14,9 +14,9 @@ public class Salir implements Comando {
 	@Override
 	public Comando parsea(String[] cadenaComando) {
 		// TODO Auto-generated method stub
-		if (cadenaComando[0] == "salir") {
+		if (cadenaComando[0].equalsIgnoreCase("SALIR")) {
 
-			return ParserComandos.comando[7];// ayuda
+			return ParserComandos.comando[6];// ayuda
 
 		} else {
 			return null;

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import control.Superficie;
+import excepciones.IndicesFueraDeRango;
 import utils.*;
 
 
@@ -29,8 +30,9 @@ public interface  Celula {
 	 * @param c
 	 * @param superficie
 	 * @return
+	 * @throws IndicesFueraDeRango 
 	 */
-	public  Casilla ejecutaMovimiento(int f, int c, Superficie superficie);
+	public  Casilla ejecutaMovimiento(int f, int c, Superficie superficie,String avance) throws IndicesFueraDeRango;
 	
 	
 	/** Este m�todo devuelve el valor del atributo esComestible. 

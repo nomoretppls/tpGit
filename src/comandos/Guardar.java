@@ -36,7 +36,7 @@ public class Guardar implements Comando {
 	@Override
 	public String textoAyuda() {
 		// TODO Auto-generated method stub
-		return null;
+		return "Guardar fichero: Guarda una partida en el fichero indicado.\n";
 	}
 
 }

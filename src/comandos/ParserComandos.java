@@ -4,7 +4,8 @@ package comandos;
 
 public class ParserComandos {
 	static Comando[] comando = { new Paso(), new Iniciar(),
-			new CrearCelulaFC(),new EliminarCelula(), new Vaciar(), new Ayuda(), new Salir(),new Jugar() };
+			new CrearCelulaFC(),new EliminarCelula(), new Vaciar(), new Ayuda(), new Salir(),new Jugar(),
+			new Cargar(),new Guardar()};
 
 	static public String ayudaComandos() {
 		String ayuda = "Posibles comandos:\n";
@@ -20,8 +21,9 @@ public class ParserComandos {
 	 * 
 	 * @param cadenas
 	 * @return
+	 * @throws Exception 
 	 */
-	static public Comando parseaComando(String[] cadenas) {
+	static public Comando parseaComando(String[] cadenas) throws Exception {
 		Comando c = null;
 		boolean escomando = false;
 

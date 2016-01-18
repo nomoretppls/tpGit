@@ -8,8 +8,8 @@ public class Ayuda implements Comando {
 	@Override
 	public Comando parsea(String[] cadenaComando) {
 		// TODO Auto-generated method stub
-		if(cadenaComando[0]=="ayuda"){
-			return ParserComandos.comando[6];//ayuda
+		if(cadenaComando[0].equalsIgnoreCase("AYUDA")){
+			return ParserComandos.comando[5];//ayuda
 		}
 		else{
 		return null;
@@ -19,7 +19,7 @@ public class Ayuda implements Comando {
 	@Override
 	public String textoAyuda() {
 		// TODO Auto-generated method stub
-		return "ayuda: Muestra la ayuda de los comandos que se puede realizar.\n";
+		return "Ayuda: Muestra la ayuda de los comandos que se puede realizar.\n";
 	}
 
 	@Override

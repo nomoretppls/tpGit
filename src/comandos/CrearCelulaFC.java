@@ -39,7 +39,7 @@ public class CrearCelulaFC implements Comando{
 	@Override
 	public String textoAyuda() {
 		// TODO Auto-generated method stub
-		return null;
+		return "CrearCelula F C: Crea una celula dependiendo del tipo de juego en curso.\n";
 	}
 
 }

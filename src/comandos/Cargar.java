@@ -42,7 +42,7 @@ public class Cargar implements Comando {
 	@Override
 	public String textoAyuda() {
 		// TODO Auto-generated method stub
-		return null;
+		return "Cargar fichero: Carga una partida desde el fichero indicado.\n";
 	}
 
 }

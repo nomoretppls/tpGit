@@ -1,64 +1,82 @@
 package celulas;
 
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
 import control.Superficie;
+import excepciones.IndicesFueraDeRango;
 import utils.*;
 
 public class CelulaCompleja implements Celula {
-	private int comidos;
+	private int comidas;
 	private final int MAX_CELULAS_COMIDAS;
-	
-	//CONSTRUCTOR
-	public CelulaCompleja(int maximoComer){
+
+	// CONSTRUCTOR
+	public CelulaCompleja(int maximoComer) {
 		this.MAX_CELULAS_COMIDAS = maximoComer;
-		this.comidos = 0;
+		this.comidas = 0;
 	}
-	
 
-	//METODOS
-	
+	// METODOS
+
 	@Override
-	public Casilla ejecutaMovimiento(int f, int c, Superficie superficie) {
-		Casilla mueveteAqui; // la creo cuando encuentro la pos aleat vacia
-		
-		int x = 0, y = 0;		
-		//creo coordenas aleatorias en x e y
-		randCoor(x, y, superficie);
-
-		while (!superficie.esVacio(x, y)){//si esta vacia crea devuelve la casilla donde se creara
-			//si no es comestible, busco una posicion nueva
-			if (!superficie.getSuperficie()[x][y].esComenstible()) {
-				int x1 = 0, y1 = 0;
-				randCoor(x1, y1, superficie);
-				while (x1 == x && y1 == y){
-					randCoor(x1, y1, superficie);
+	public Casilla ejecutaMovimiento(int f, int c, Superficie superficie, String avance) throws IndicesFueraDeRango {
+		//he implementado este tipo de celula
+		Casilla newPos;
+		Casilla oldPos = new Casilla(f, c);
+		int libres = 0;
+		Casilla[] posLibres = new Casilla[f * c];
+		posicionesLibres(posLibres, libres, superficie);
+		if (libres != 0) {
+			int rand = (int) (Math.random() * 10) % libres;
+			newPos = posLibres[rand];
+			if(superficie.getSuperficie()[newPos.getX()][newPos.getY()].esComenstible()){
+				//se come celulasimple
+				superficie.eliminaUnaCelula(newPos.getX(), newPos.getY());
+				superficie.moverCelula(f,c,newPos.getX(),newPos.getY());
+				avance=avance+"Celula Compleja en ("+f+","+c+") se mueve a("+newPos.getX()+","+newPos.getY()+") --COME--\n";
+				if(this.comidas<MAX_CELULAS_COMIDAS){
+					this.comidas++;			
 				}
-				x=x1;y=y1;
+				else{//explota a la cuarta comida
+					superficie.eliminaUnaCelula(newPos.getX(), newPos.getY());
+					avance=avance+"Explota la celula compleja  en ("+newPos.getX()+","+newPos.getY()+")\n";
+				}
+				
 			}
-			else {// si es comestible
-				mueveteAqui=new Casilla(x,y);
-				return mueveteAqui;
+			else{// posicion vacia
+				superficie.moverCelula(f,c,newPos.getX(),newPos.getY());
+				avance=avance+"Celula Compleja en ("+f+","+c+") se mueve a("+newPos.getX()+","+newPos.getY()+") --NO COME--\n";
 			}
-			/* Esto creo que hay que comprobarlo en otro sitio.
-			//si es comestible, y no he alcanzado el maximo de comidas
-			else if (superficie.getSuperficie()[x][y].esComenstible() && comidos < MAX_CELULAS_COMIDAS){
-				mueveteAqui = new Casilla(x, y);
-				return mueveteAqui;
-			}
-			//si es comestible y he alcanzado el maximo de comidas permitidas
-			else if (comidos == MAX_CELULAS_COMIDAS){
-				superficie.eliminaUnaCelula(x, y);
-			}
-			*/
-
+			return newPos;
+		} else {
+			return null;
 		}
-		//si la primera que encuentro es libre, devuelvo la casilla a donde mover la celula
-		mueveteAqui = new Casilla(x, y);
-		return mueveteAqui;
+	}
+
+	public void posicionesLibres(Casilla[] posLibres, int libres, Superficie s) {
+		libres = 0;
+		for (int i = 0; i < s.getFilas(); i++) {
+			for (int j = 0; j < s.getColumnas(); j++) {
+				if (s.getSuperficie()[i][j] == null) {
+					posLibres[libres] = new Casilla(i, j);
+					libres++;
+				} else if (s.getSuperficie()[i][j].esComenstible()) {
+					//es celula simple
+					posLibres[libres] = new Casilla(i, j);
+					libres++;
+				}
+			}
+		}
+	}
+
+	public int getComidos() {
+		return comidas;
+	}
+
+	public void setComidos(int comidos) {
+		this.comidas = comidos;
 	}
 
 	@Override
@@ -74,7 +92,7 @@ public class CelulaCompleja implements Celula {
 	@Override
 	public void cargar(Scanner sc) {
 		// TODO Auto-generated method stub
-		this.comidos=new Integer(sc.nextInt());
+		this.comidas = new Integer(sc.nextInt());
 	}
 
 	@Override
@@ -82,8 +100,7 @@ public class CelulaCompleja implements Celula {
 		// TODO Auto-generated method stub
 		fw.write("compleja");
 		fw.write(" ");
-		fw.write(Integer.toString(this.comidos));
+		fw.write(Integer.toString(this.comidas));
 	}
-	
-	
+
 }
