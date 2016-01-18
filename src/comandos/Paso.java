@@ -1,11 +1,12 @@
 package comandos;
 import control.Controlador;
+import excepciones.IndicesFueraDeRango;
 import mundos.*;
 
 public class Paso implements Comando{
 
 	@Override
-	public void ejecuta(Controlador control) {
+	public void ejecuta(Controlador control) throws IndicesFueraDeRango {
 		// TODO Auto-generated method stub
 		control.daUnPaso();
 	}

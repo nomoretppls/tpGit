@@ -24,14 +24,14 @@ public class CelulaCompleja implements Celula {
 	public Casilla ejecutaMovimiento(int f, int c, Superficie superficie, String avance) throws IndicesFueraDeRango {
 		//he implementado este tipo de celula
 		Casilla newPos;
-		Casilla oldPos = new Casilla(f, c);
-		int libres = 0;
-		Casilla[] posLibres = new Casilla[f * c];
-		posicionesLibres(posLibres, libres, superficie);
-		if (libres != 0) {
-			int rand = (int) (Math.random() * 10) % libres;
+		
+		int libres;
+		Casilla[] posLibres = new Casilla[superficie.getFilas() * superficie.getColumnas()];
+		libres =posicionesLibres(posLibres, superficie);
+		if (libres > 0) {
+			int rand = (int) (Math.random() * 100) % libres;
 			newPos = posLibres[rand];
-			if(superficie.getSuperficie()[newPos.getX()][newPos.getY()].esComenstible()){
+			if(superficie.getSuperficie()[newPos.getX()][newPos.getY()]!=null&& superficie.getSuperficie()[newPos.getX()][newPos.getY()].esComenstible()){
 				//se come celulasimple
 				superficie.eliminaUnaCelula(newPos.getX(), newPos.getY());
 				superficie.moverCelula(f,c,newPos.getX(),newPos.getY());
@@ -55,8 +55,8 @@ public class CelulaCompleja implements Celula {
 		}
 	}
 
-	public void posicionesLibres(Casilla[] posLibres, int libres, Superficie s) {
-		libres = 0;
+	public int posicionesLibres(Casilla[] posLibres, Superficie s) {
+		int libres=0;
 		for (int i = 0; i < s.getFilas(); i++) {
 			for (int j = 0; j < s.getColumnas(); j++) {
 				if (s.getSuperficie()[i][j] == null) {
@@ -69,6 +69,7 @@ public class CelulaCompleja implements Celula {
 				}
 			}
 		}
+		return libres;
 	}
 
 	public int getComidos() {

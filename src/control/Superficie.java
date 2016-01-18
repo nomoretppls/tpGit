@@ -79,73 +79,73 @@ public class Superficie {
 	
 	
 
-	public String movimiento() {
-		String mensaje = "";
-		boolean acciones = false;
-
-		boolean[][] movido = new boolean[filas][columnas];
-		inicializaArrayMovidos(movido);
-
-		for (int i = 0; i < filas; i++) {
-			for (int j = 0; j < columnas; j++) {
-				if (superficie[i][j] != null) {// selecciono una celula
-					ejecutaMovimiento(i, j);// aqui meto posiciones libres del
-											// atributo libres
-					// necesito este i j
-					int huecosLibres = size(libres);
-					if (huecosLibres > 0) {// movimiento y reproduccion si
-											// procede
-						int randNum = (int) (Math.random() * 10) % huecosLibres;
-						// superficie[i][j].setMove(true);
-						superficie[i][j].setPasosReproduccion(superficie[i][j].getPasosReproduccion() - 1);
-						superficie[libres[randNum].getX()][libres[randNum].getY()] = superficie[i][j];
-
-						superficie[i][j] = null;
-						// Si se mueve guarda este mensaje
-						mensaje = mensaje + "Movimiento de (" + i + "," + j + ") a (" + libres[randNum].getX() + ","
-								+ libres[randNum].getY() + ").\n";
-						//
-						if (superficie[libres[randNum].getX()][libres[randNum].getY()].getPasosReproduccion() == -1
-								&& huecosLibres > 0) {
-							creaCelula(i, j, new CelulaSimple(3, 3));// mensaje
-																		// de
-							// rerpoduccion
-							mensaje = mensaje + "Nace una celula en (" + i + "," + j + ")" + "cuyo padre es ("
-									+ libres[randNum].getX() + "," + libres[randNum].getY() + ").\n";
-							superficie[libres[randNum].getX()][libres[randNum].getY()].setPasosReproduccion(3);
-						}
-						//
-
-					} else {// NO movimineto y muerte si procede
-
-						superficie[i][j].setPasNoMov(superficie[i][j].getPasNoMov() - 1);
-						if (superficie[i][j].getPasNoMov() == -1) {
-							acciones = eliminaUnaCelula(i, j);
-							mensaje = mensaje + "Muere la celula (" + i + "," + j + ") por inactividad.\n";
-
-						} else if (superficie[i][j].getPasosReproduccion() == 0) {
-							superficie[i][j] = null;
-							mensaje = mensaje + "Muere la celula (" + i + "," + j + ") por no poder reproducirse.\n";
-
-						}
-					}
-
-				}
-			}
-		}
-
-		// ahora vuelvo a poner en false move para los proximos movimientos de
-		// las celulas
-		for (int i = 0; i < filas; i++) {
-			for (int j = 0; j < columnas; j++) {
-				if (superficie[i][j] != null) {
-					// superficie[i][j].setMove(false);
-				}
-			}
-
-		}
-		return mensaje;
-	}
+//	public String movimiento() {
+//		String mensaje = "";
+//		boolean acciones = false;
+//
+//		boolean[][] movido = new boolean[filas][columnas];
+//		inicializaArrayMovidos(movido);
+//
+//		for (int i = 0; i < filas; i++) {
+//			for (int j = 0; j < columnas; j++) {
+//				if (superficie[i][j] != null) {// selecciono una celula
+//					ejecutaMovimiento(i, j);// aqui meto posiciones libres del
+//											// atributo libres
+//					// necesito este i j
+//					int huecosLibres = size(libres);
+//					if (huecosLibres > 0) {// movimiento y reproduccion si
+//											// procede
+//						int randNum = (int) (Math.random() * 10) % huecosLibres;
+//						// superficie[i][j].setMove(true);
+//						superficie[i][j].setPasosReproduccion(superficie[i][j].getPasosReproduccion() - 1);
+//						superficie[libres[randNum].getX()][libres[randNum].getY()] = superficie[i][j];
+//
+//						superficie[i][j] = null;
+//						// Si se mueve guarda este mensaje
+//						mensaje = mensaje + "Movimiento de (" + i + "," + j + ") a (" + libres[randNum].getX() + ","
+//								+ libres[randNum].getY() + ").\n";
+//						//
+//						if (superficie[libres[randNum].getX()][libres[randNum].getY()].getPasosReproduccion() == -1
+//								&& huecosLibres > 0) {
+//							creaCelula(i, j, new CelulaSimple(3, 3));// mensaje
+//																		// de
+//							// rerpoduccion
+//							mensaje = mensaje + "Nace una celula en (" + i + "," + j + ")" + "cuyo padre es ("
+//									+ libres[randNum].getX() + "," + libres[randNum].getY() + ").\n";
+//							superficie[libres[randNum].getX()][libres[randNum].getY()].setPasosReproduccion(3);
+//						}
+//						//
+//
+//					} else {// NO movimineto y muerte si procede
+//
+//						superficie[i][j].setPasNoMov(superficie[i][j].getPasNoMov() - 1);
+//						if (superficie[i][j].getPasNoMov() == -1) {
+//							acciones = eliminaUnaCelula(i, j);
+//							mensaje = mensaje + "Muere la celula (" + i + "," + j + ") por inactividad.\n";
+//
+//						} else if (superficie[i][j].getPasosReproduccion() == 0) {
+//							superficie[i][j] = null;
+//							mensaje = mensaje + "Muere la celula (" + i + "," + j + ") por no poder reproducirse.\n";
+//
+//						}
+//					}
+//
+//				}
+//			}
+//		}
+//
+//		// ahora vuelvo a poner en false move para los proximos movimientos de
+//		// las celulas
+//		for (int i = 0; i < filas; i++) {
+//			for (int j = 0; j < columnas; j++) {
+//				if (superficie[i][j] != null) {
+//					// superficie[i][j].setMove(false);
+//				}
+//			}
+//
+//		}
+//		return mensaje;
+//	}
 
 	// sirve para saber cuantas posiciones hay guardadas en el array
 
@@ -337,21 +337,32 @@ public class Superficie {
 			this.superficie[f][c] = celula;
 			sc.nextLine();
 		}
+		sc.close();
 
 	}
-
-	public Casilla ejecutaMovimiento(int f, int c,String avance) {
+	public String movimiento() throws IndicesFueraDeRango{
+		String avance="";
+		return ejecutaMovimiento(avance);
+	}
+	public String ejecutaMovimiento(String avance) throws IndicesFueraDeRango {
 		// celula.ejecutaMovimiento(...)
 		Casilla newPos;
+		boolean[][] movidos= new boolean[filas][columnas];
+		inicializaArrayMovidos(movidos);
 		for (int i = 0; i < filas; i++) {
 			for (int j = 0; j <columnas; j++) {
-				if(superficie[i][j]!=null){
+				if(superficie[i][j]!=null&&!movidos[i][j]){
 					newPos=superficie[i][j].ejecutaMovimiento(i, j,this, avance);
-					
+					if(newPos==null){
+						movidos[i][j]=true;
+					}
+					else{
+						movidos[newPos.getX()][newPos.getY()]=true;
+					}
 				}
 			}
 		}
-		return null;
+		return avance;
 
 	}
 

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import control.Superficie;
+import excepciones.IndicesFueraDeRango;
 import utils.*;
 
 public class CelulaSimple implements Celula {
@@ -33,72 +34,88 @@ public class CelulaSimple implements Celula {
 	 * Es el metodo de superficie, busco en los adyacentes a mi posicion
 	 * casillas libres, crea un array de libres adyacentes devuelve una pos
 	 * aleatoria del array de Casillas
-	 * @return me devuelve una casilla a la que se puede mover  la  celulasimple;
+	 * 
+	 * @return me devuelve una casilla a la que se puede mover la celulasimple;
+	 * @throws IndicesFueraDeRango
 	 */
 	@Override
-	public Casilla ejecutaMovimiento(int f, int c, Superficie superficie,String avance) {// solo
-		int tamañoArray = 8; 
-		Casilla newPos=null;
+	public Casilla ejecutaMovimiento(int f, int c, Superficie superficie, String avance) throws IndicesFueraDeRango {// solo
+		int tamañoArray = 8;
+		Casilla newPos = null;
 		Casilla libres[] = new Casilla[tamañoArray];
 
 		int i = 0;
-		if (f - 1 >= 0 && c - 1 >= 0
-				&& superficie.getSuperficie()[f - 1][c - 1] == null) {
+		if (f - 1 >= 0 && c - 1 >= 0 && superficie.getSuperficie()[f - 1][c - 1] == null) {
 			libres[i] = new Casilla(f - 1, c - 1);
 			i++;
 		}
-		else if (f - 1 >= 0 && c >= 0
-				&& superficie.getSuperficie()[f - 1][c] == null) {
+		if (f - 1 >= 0 && c >= 0 && superficie.getSuperficie()[f - 1][c] == null) {
 			libres[i] = new Casilla(f - 1, c);
 			i++;
 		}
-		else if (f - 1 >= 0 && c + 1 < superficie.getColumnas()
-				&& superficie.getSuperficie()[f - 1][c + 1] == null) {
+		if (f - 1 >= 0 && c + 1 < superficie.getColumnas() && superficie.getSuperficie()[f - 1][c + 1] == null) {
 			libres[i] = new Casilla(f - 1, c + 1);
 			i++;
 
 		}
-		else if (f >= 0 && c - 1 >= 0
-				&& superficie.getSuperficie()[f][c - 1] == null) {
+		if (f >= 0 && c - 1 >= 0 && superficie.getSuperficie()[f][c - 1] == null) {
 			libres[i] = new Casilla(f, c - 1);
 			i++;
 
 		}
-		else if (f >= 0 && c + 1 < superficie.getColumnas()
-				&& superficie.getSuperficie()[f][c + 1] == null) {
+		if (f >= 0 && c + 1 < superficie.getColumnas() && superficie.getSuperficie()[f][c + 1] == null) {
 			libres[i] = new Casilla(f, c + 1);
 			i++;
 
 		}
-		else if (f + 1 < superficie.getFilas() && c - 1 >= 0
-				&& superficie.getSuperficie()[f + 1][c - 1] == null) {
+		if (f + 1 < superficie.getFilas() && c - 1 >= 0 && superficie.getSuperficie()[f + 1][c - 1] == null) {
 			libres[i] = new Casilla(f + 1, c - 1);
 			i++;
 		}
-		else if (f + 1 < superficie.getFilas() && c >= 0
-				&& superficie.getSuperficie()[f + 1][c] == null) {
+		if (f + 1 < superficie.getFilas() && c >= 0 && superficie.getSuperficie()[f + 1][c] == null) {
 			libres[i] = new Casilla(f + 1, c);
 			i++;
 		}
-		else if (f + 1 < superficie.getFilas() && c + 1 < superficie.getColumnas()
+		if (f + 1 < superficie.getFilas() && c + 1 < superficie.getColumnas()
 				&& superficie.getSuperficie()[f + 1][c + 1] == null) {
 			libres[i] = new Casilla(f + 1, c + 1);
 			i++;
-		
+
 		}
-		else return null;
-		
-		int x = (int) (Math.random() * 10) % size(libres);
-		
-		newPos=libres[x];
-		//muevo la celula a la nueva posicion
-		superficie.moverCelula(f,c,newPos.getX(),newPos.getY());
-		
-		
-		return newPos;//ahora esta en esta posicion
+		// hay posiciones libres
+		if (i > 0) {
+
+			int x = (int) (Math.random() * 10) % i;
+
+			newPos = libres[x];
+			// muevo la celula a la nueva posicion
+			superficie.moverCelula(f, c, newPos.getX(), newPos.getY());
+			avance = avance + "Celula Simple en (" + f + "," + c + ") se mueve a(" + newPos.getX() + "," + newPos.getY()
+					+ ")\n";
+			if (this.pasReproduccion > 0) {//
+				this.pasReproduccion--;
+			} else {// al cuarto paso se reproduce
+				superficie.creaCelula(f, c, new CelulaSimple(3, 3));
+				avance = avance + "Nace nueva celula simple en (" + f + "," + c + ") cuyo padre ha sido("
+						+ newPos.getX() + "," + newPos.getY() + ")\n";
+				this.pasReproduccion = MAX_PASOS_REPRODUCCION;
+			}
+
+			return newPos;// ahora esta en esta posicion
+
+		} 
+		else {//no se mueve
+			if(this.pasNoMov>0){
+				this.pasNoMov--;
+			}
+			else{//al cuarto paso sin moverse
+				superficie.eliminaUnaCelula(f, c);
+				avance=avance+"Muere una celula de la casilla(" + f + "," + c + ") por inactividad.\n";
+			}
+			return null;
+		}
+
 	}
-	
-	
 
 	public int getPasReproduccion() {
 		return pasReproduccion;
@@ -125,8 +142,8 @@ public class CelulaSimple implements Celula {
 	@Override
 	public void cargar(Scanner sc) throws IOException {
 		// TODO Auto-generated method stub
-		this.pasReproduccion=new Integer(sc.nextInt());
-		this.pasNoMov=new Integer(sc.nextInt());
+		this.pasReproduccion = new Integer(sc.nextInt());
+		this.pasNoMov = new Integer(sc.nextInt());
 	}
 
 	@Override
@@ -137,7 +154,7 @@ public class CelulaSimple implements Celula {
 		fw.write(Integer.toString(this.pasReproduccion));
 		fw.write(" ");
 		fw.write(Integer.toString(this.pasNoMov));
-	
+
 	}
 
 }

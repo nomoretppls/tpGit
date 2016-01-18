@@ -122,11 +122,11 @@ public class Controlador {
 		}
 	}
 
-	public void daUnPaso() {
+	public void daUnPaso() throws IndicesFueraDeRango {
 		if (m != null && !m.superficieVacia()) {
 			System.out.println(m.mostrarAvance());
 			String mensaje = m.evoluciona();
-			System.out.println("Se ha dado un paso en la evolucion. \n" + mensaje);
+			System.out.println("Se ha dado un paso en la evolucion. \n"+mensaje );
 		} else {
 			System.out.println("No se ha podido dar un paso en la evolucion, la superficie esta vacia.\n");
 		}
@@ -158,11 +158,14 @@ public class Controlador {
 	public void menuOpciones() {
 
 		System.out.println("ESCRIBE UNA DE LAS SIGUIENTES OPCIONES, COMO APARECEN");
+		System.out.println("JUGAR M F C S C");
 		System.out.println("INICIAR");
 		System.out.println("PASO");
 		System.out.println("CREARCELULA F C");
 		System.out.println("ELIMINARCELULA F C");
 		System.out.println("VACIAR");
+		System.out.println("CARGAR [nombreFichero]");
+		System.out.println("GUARDAR [nombreFichero]");
 		System.out.println("AYUDA");
 		System.out.println("SALIR");
 		System.out.print("COMANDO > ");

@@ -116,8 +116,9 @@ public abstract class Mundo {
 	 * 
 	 * @return devuelve un string con las acciones que realizan las celulas del
 	 *         mundo.
+	 * @throws IndicesFueraDeRango 
 	 */
-	public String evoluciona() {
+	public String evoluciona() throws IndicesFueraDeRango {
 
 		return superficie.movimiento();
 	}
