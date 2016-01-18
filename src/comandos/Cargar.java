@@ -4,7 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import control.Controlador;
+import excepciones.ErrorDeInicializacion;
 import excepciones.FormatoNumericoIncorrecto;
+import excepciones.PalabraIncorrecta;
 
 
 public class Cargar implements Comando {
@@ -16,7 +18,7 @@ public class Cargar implements Comando {
 	public Cargar(){}
 
 	@Override
-	public void ejecuta(Controlador control) throws FormatoNumericoIncorrecto, IOException {
+	public void ejecuta(Controlador control) throws FormatoNumericoIncorrecto, IOException, ErrorDeInicializacion, PalabraIncorrecta {
 		// TODO Auto-generated method stub
 		control.cargar(this.nomFich);
 		

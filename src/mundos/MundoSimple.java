@@ -25,7 +25,7 @@ public class MundoSimple extends Mundo {
 	@Override
 	public void inicializaMundo() throws ErrorDeInicializacion {
 		// TODO Auto-generated method stub
-		
+		this.superficie=new Superficie(filas,columnas);
 		try {
 			int i = 0;
 			while (i<this.numCelulas){

@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import comandos.*;
 import control.*;
+import excepciones.ErrorDeInicializacion;
 import excepciones.FormatoNumericoIncorrecto;
 import excepciones.IndicesFueraDeRango;
 import excepciones.PalabraIncorrecta;
@@ -57,22 +58,30 @@ public abstract class Mundo {
 	 * @param fw
 	 * @throws IOException
 	 * @throws IndicesFueraDeRango
+	 * @throws ErrorDeInicializacion 
 	 */
-	public void guardar(FileWriter fw) throws IOException, IndicesFueraDeRango {
+	public void guardar(FileWriter fw) throws IOException, IndicesFueraDeRango, ErrorDeInicializacion {
 
 		fw.write(Integer.toString(this.filas));
 		fw.write(System.getProperty("line.separator"));
 		fw.write(Integer.toString(this.columnas));
 		fw.write(System.getProperty("line.separator"));
-		this.superficie.guardar(fw);
+		if (superficie != null) {
+			this.superficie.guardar(fw);// explota fw
+		}
+		else throw new  ErrorDeInicializacion("Superficie apunta a null, no se puede guardar nada. ");
+		
 	}
 
 	public void cargar(Scanner sc)
-			throws PalabraIncorrecta, FormatoNumericoIncorrecto, IOException, IndicesFueraDeRango {
+			throws PalabraIncorrecta, FormatoNumericoIncorrecto, IOException, IndicesFueraDeRango, ErrorDeInicializacion {
 		this.filas = sc.nextInt();
 		this.columnas = sc.nextInt();
 		this.superficie = new Superficie(this.filas, this.columnas);
-		this.superficie.cargar(sc);
+		if (superficie != null) {
+			this.superficie.cargar(sc);
+		}
+		else throw new  ErrorDeInicializacion("Superficie apunta a null, no se puede cargar. ");
 
 	}
 
@@ -116,11 +125,12 @@ public abstract class Mundo {
 	 * 
 	 * @return devuelve un string con las acciones que realizan las celulas del
 	 *         mundo.
-	 * @throws IndicesFueraDeRango 
+	 * @throws IndicesFueraDeRango
 	 */
 	public String evoluciona() throws IndicesFueraDeRango {
-
-		return superficie.movimiento();
+		StringBuilder avance = new StringBuilder();
+		superficie.movimiento(avance);
+		return avance.toString();
 	}
 
 	/**
@@ -175,8 +185,7 @@ public abstract class Mundo {
 	public void crearCelula(int fila, int columna) throws IndicesFueraDeRango {
 		if (superficie.esVacio(fila, columna)) {
 			this.creaCelula(fila, columna);
-		}
-		else {
+		} else {
 			System.out.println("Posicion ocupada.");
 		}
 	}

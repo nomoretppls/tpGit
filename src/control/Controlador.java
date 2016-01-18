@@ -78,7 +78,7 @@ public class Controlador {
 		}
 	}
 
-	public void cargar(String nomFich) throws FormatoNumericoIncorrecto, IOException {
+	public void cargar(String nomFich) throws FormatoNumericoIncorrecto, IOException, ErrorDeInicializacion, PalabraIncorrecta {
 		Mundo game = this.m;
 		Scanner sc = new Scanner(new File(nomFich));
 		try {
@@ -94,9 +94,11 @@ public class Controlador {
 					throw new PalabraIncorrecta("ERROR al cargar.");
 				}
 			}
-		} catch (PalabraIncorrecta e) {
-			this.m = game;
-		} catch (FormatoNumericoIncorrecto e) {
+//		} catch (PalabraIncorrecta e) {
+//			this.m = game;
+//		} 
+			}
+			catch (FormatoNumericoIncorrecto e) {
 			this.m = game;
 
 		} catch (IndicesFueraDeRango e) {
@@ -119,6 +121,10 @@ public class Controlador {
 		} catch (IndicesFueraDeRango e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ErrorDeInicializacion e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.toString());
+			e.printStackTrace();
 		}
 	}
 
@@ -126,7 +132,7 @@ public class Controlador {
 		if (m != null && !m.superficieVacia()) {
 			System.out.println(m.mostrarAvance());
 			String mensaje = m.evoluciona();
-			System.out.println("Se ha dado un paso en la evolucion. \n"+mensaje );
+			System.out.println("Se ha dado un paso en la evolucion. \n"+mensaje);
 		} else {
 			System.out.println("No se ha podido dar un paso en la evolucion, la superficie esta vacia.\n");
 		}
@@ -134,8 +140,7 @@ public class Controlador {
 	}
 
 	public void juega(Mundo mundo) throws Exception {// este mundo se inicia en
-														// el comando juega y
-														// aqui lo instancio
+														// el comando juega y												// aqui lo instancio
 		this.m = mundo;
 		mundo.inicializaMundo();
 		// completar

@@ -32,7 +32,7 @@ public interface  Celula {
 	 * @return
 	 * @throws IndicesFueraDeRango 
 	 */
-	public  Casilla ejecutaMovimiento(int f, int c, Superficie superficie,String avance) throws IndicesFueraDeRango;
+	public  Casilla ejecutaMovimiento(int f, int c, Superficie superficie,StringBuilder avance) throws IndicesFueraDeRango;
 	
 	
 	/** Este m�todo devuelve el valor del atributo esComestible. 

@@ -21,10 +21,10 @@ public class CelulaCompleja implements Celula {
 	// METODOS
 
 	@Override
-	public Casilla ejecutaMovimiento(int f, int c, Superficie superficie, String avance) throws IndicesFueraDeRango {
+	public Casilla ejecutaMovimiento(int f, int c, Superficie superficie, StringBuilder avance) throws IndicesFueraDeRango {
 		//he implementado este tipo de celula
 		Casilla newPos;
-		
+		String avances="";
 		int libres;
 		Casilla[] posLibres = new Casilla[superficie.getFilas() * superficie.getColumnas()];
 		libres =posicionesLibres(posLibres, superficie);
@@ -35,22 +35,25 @@ public class CelulaCompleja implements Celula {
 				//se come celulasimple
 				superficie.eliminaUnaCelula(newPos.getX(), newPos.getY());
 				superficie.moverCelula(f,c,newPos.getX(),newPos.getY());
-				avance=avance+"Celula Compleja en ("+f+","+c+") se mueve a("+newPos.getX()+","+newPos.getY()+") --COME--\n";
+				avances=avances+"Celula Compleja en ("+f+","+c+") se mueve a("+newPos.getX()+","+newPos.getY()+") --COME--\n";
 				if(this.comidas<MAX_CELULAS_COMIDAS){
 					this.comidas++;			
 				}
 				else{//explota a la cuarta comida
 					superficie.eliminaUnaCelula(newPos.getX(), newPos.getY());
-					avance=avance+"Explota la celula compleja  en ("+newPos.getX()+","+newPos.getY()+")\n";
+					avances=avances+"Explota la celula compleja  en ("+newPos.getX()+","+newPos.getY()+")\n";
 				}
 				
 			}
 			else{// posicion vacia
 				superficie.moverCelula(f,c,newPos.getX(),newPos.getY());
-				avance=avance+"Celula Compleja en ("+f+","+c+") se mueve a("+newPos.getX()+","+newPos.getY()+") --NO COME--\n";
+				avances=avances+"Celula Compleja en ("+f+","+c+") se mueve a("+newPos.getX()+","+newPos.getY()+") --NO COME--\n";
 			}
+			avance.append(avances);
 			return newPos;
 		} else {
+			avances=avances+"Celula Compleja en ("+f+","+c+") NO se mueve.\n";
+			avance.append(avances);
 			return null;
 		}
 	}
@@ -102,6 +105,7 @@ public class CelulaCompleja implements Celula {
 		fw.write("compleja");
 		fw.write(" ");
 		fw.write(Integer.toString(this.comidas));
+		//fw.write(System.getProperty("line.separator"));
 	}
 
 }

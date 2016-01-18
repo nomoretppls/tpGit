@@ -64,7 +64,7 @@ public class MundoComplejo extends Mundo {
 	@Override
 	public void guardarMundo(FileWriter fw) throws IOException {
 		// TODO Auto-generated method stub
-		fw.write("complejo");fw.write("line.separator");
+		fw.write("complejo");fw.write(System.getProperty("line.separator"));
 	}
 	protected void creaCelula(int f,int c) throws IndicesFueraDeRango{
 		System.out.println("Estas en un mundo complejo, que se le va a hacer T-T.");

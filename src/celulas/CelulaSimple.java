@@ -18,6 +18,8 @@ public class CelulaSimple implements Celula {
 	public CelulaSimple(int pasosNoMov, int pasosReproduccion) {
 		this.MAX_PASOS_REPRODUCCION = pasosReproduccion;
 		this.MAX_PASOS_SIN_MOVER = pasosNoMov;
+		this.pasReproduccion=MAX_PASOS_REPRODUCCION;
+		this.pasNoMov=MAX_PASOS_SIN_MOVER;
 	}
 
 	// METODOS
@@ -39,8 +41,9 @@ public class CelulaSimple implements Celula {
 	 * @throws IndicesFueraDeRango
 	 */
 	@Override
-	public Casilla ejecutaMovimiento(int f, int c, Superficie superficie, String avance) throws IndicesFueraDeRango {// solo
+	public Casilla ejecutaMovimiento(int f, int c, Superficie superficie, StringBuilder avance) throws IndicesFueraDeRango {// solo
 		int tamañoArray = 8;
+		String avances="";
 		Casilla newPos = null;
 		Casilla libres[] = new Casilla[tamañoArray];
 
@@ -90,17 +93,18 @@ public class CelulaSimple implements Celula {
 			newPos = libres[x];
 			// muevo la celula a la nueva posicion
 			superficie.moverCelula(f, c, newPos.getX(), newPos.getY());
-			avance = avance + "Celula Simple en (" + f + "," + c + ") se mueve a(" + newPos.getX() + "," + newPos.getY()
+			avances = avances + "Celula Simple en (" + f + "," + c + ") se mueve a(" + newPos.getX() + "," + newPos.getY()
 					+ ")\n";
 			if (this.pasReproduccion > 0) {//
 				this.pasReproduccion--;
 			} else {// al cuarto paso se reproduce
 				superficie.creaCelula(f, c, new CelulaSimple(3, 3));
-				avance = avance + "Nace nueva celula simple en (" + f + "," + c + ") cuyo padre ha sido("
+				avances = avances + "Nace nueva celula simple en (" + f + "," + c + ") cuyo padre ha sido("
 						+ newPos.getX() + "," + newPos.getY() + ")\n";
 				this.pasReproduccion = MAX_PASOS_REPRODUCCION;
 			}
-
+			avance.append(avances);
+			
 			return newPos;// ahora esta en esta posicion
 
 		} 
@@ -110,8 +114,9 @@ public class CelulaSimple implements Celula {
 			}
 			else{//al cuarto paso sin moverse
 				superficie.eliminaUnaCelula(f, c);
-				avance=avance+"Muere una celula de la casilla(" + f + "," + c + ") por inactividad.\n";
+				avances=avances+"Muere una celula de la casilla(" + f + "," + c + ") por inactividad.\n";
 			}
+			avance.append(avances);
 			return null;
 		}
 
@@ -154,6 +159,7 @@ public class CelulaSimple implements Celula {
 		fw.write(Integer.toString(this.pasReproduccion));
 		fw.write(" ");
 		fw.write(Integer.toString(this.pasNoMov));
+		//fw.write(System.getProperty("line.separator"));
 
 	}
 

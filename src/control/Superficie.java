@@ -19,10 +19,7 @@ public class Superficie {
 	private Celula[][] superficie;
 	private int filas;
 	private int columnas;
-	private Casilla[] libres;
-
-//	final int MAX_CELULAS_S = 2;
-//	final int MAX_CELULAS_C = 2;
+	
 	final int PASOS_REPRODUCCION = 3;
 	final int MAX_PASOS_SIN_MOVER = 3;
 
@@ -296,7 +293,7 @@ public class Superficie {
 		boolean filaVacia = true;
 		for (int i = 0; i < this.filas; i++) {
 			for (int j = 0; j < this.columnas; j++) {
-				if (this.esVacio(i, j)) {
+				if (!this.esVacio(i, j)) {
 					fw.write(Integer.toString(i));
 					fw.write(" ");
 					fw.write(Integer.toString(j));
@@ -340,29 +337,35 @@ public class Superficie {
 		sc.close();
 
 	}
-	public String movimiento() throws IndicesFueraDeRango{
-		String avance="";
-		return ejecutaMovimiento(avance);
-	}
-	public String ejecutaMovimiento(String avance) throws IndicesFueraDeRango {
-		// celula.ejecutaMovimiento(...)
+	public void movimiento(StringBuilder avance) throws IndicesFueraDeRango{
+		
 		Casilla newPos;
 		boolean[][] movidos= new boolean[filas][columnas];
 		inicializaArrayMovidos(movidos);
 		for (int i = 0; i < filas; i++) {
 			for (int j = 0; j <columnas; j++) {
 				if(superficie[i][j]!=null&&!movidos[i][j]){
-					newPos=superficie[i][j].ejecutaMovimiento(i, j,this, avance);
-					if(newPos==null){
+					newPos=ejecutaMovimiento(i, j,this, avance);
+					if(newPos==null){//no se puede mover
 						movidos[i][j]=true;
 					}
-					else{
+					else{//se mueve a esta nueva pos
 						movidos[newPos.getX()][newPos.getY()]=true;
 					}
 				}
 			}
 		}
-		return avance;
+		
+		
+		
+	}
+	public Casilla ejecutaMovimiento(int f,int c,Superficie s,StringBuilder avance) throws IndicesFueraDeRango {
+		// celula.ejecutaMovimiento(...)
+		Casilla newPos=null;
+		//ejecuta movimiento de cada celula segun su tipo
+		newPos=this.superficie[f][c].ejecutaMovimiento(f, c,s, avance);
+					
+		return newPos;
 
 	}
 
